@@ -9,6 +9,33 @@
 #include "test_suite.h"
 
 namespace ccoo::data_structure {
+  bool test_ll_push_pop_node() {
+    LinkedList<int> ll({ 1, 2, 3, 4 });
+
+    Node<int>* node = ll.front();
+    ll.erase(node);
+    ll.push_back(node);
+
+    ASSERT_EQ(ll.size(), 4);
+    node = ll.front();
+    for (int i = 2; i <= 4; i++) {
+      ASSERT_EQ(node->val, i);
+      node = node->next;
+    }
+    ASSERT_EQ(node->val, 1);
+
+    node = ll.back();
+    ll.erase(node);
+    ll.push_front(node);
+    ASSERT_EQ(ll.size(), 4);
+    for (int i = 1; i <= 4; i++) {
+      ASSERT_EQ(node->val, i);
+      node = node->next;
+    }
+
+    return true;
+  }
+
   bool test_ll_push_pop() {
     LinkedList<int> ll;
 
@@ -203,6 +230,20 @@ namespace ccoo::data_structure {
       ASSERT_PTR_NE(ll.back(), nullptr);
     }
 
+    {
+      LinkedList<int> ll({1,2,3,4});
+      Node<int>* node = ll.front();
+
+      ll.erase(node);
+      delete node;
+      ASSERT_EQ(ll.size(), 3);
+
+      node = ll.back();
+      ll.erase(node);
+      delete node;
+      ASSERT_EQ(ll.size(), 2);
+    }
+
     return true;
   }
 
@@ -233,6 +274,7 @@ namespace ccoo::data_structure {
 
     return true;
   }
+
 }
 
 
@@ -241,6 +283,7 @@ int main() {
   bool success = true;
 
   success = success && RUN_TEST(test_ll_push_pop);
+  success = success && RUN_TEST(test_ll_push_pop_node);
   success = success && RUN_TEST(test_ll_raii_copy);
   success = success && RUN_TEST(test_ll_raii_move);
   success = success && RUN_TEST(test_ll_raii_pass_by_ref);

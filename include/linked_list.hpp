@@ -75,32 +75,73 @@ namespace ccoo::data_structure {
       Node<T>* front() { return head; }
       Node<T>* back() { return tail; }
 
-      void push_back(const T& val) {
+      /**
+       * Pushes a node instance to the tail of this instance, taking memory ownership of the node.
+       *
+       * @param node Node instance to push to tail.
+       */
+      void push_back(Node<T>* node) {
         /* Empty LinkedList */
         if (_size == 0) {
-          head      = new Node<T>();
-          head->val = val;
+          head      = node;
           tail      = head;
         }
 
         /* Single entry within the LinkedList */
         else if (_size == 1) {
-          tail       = new Node<T>();
-          tail->val  = val;
+          tail       = node;
           tail->prev = head;
           head->next = tail;
         }
 
         /* 2+ entries within the LinkedList */
         else {
-          tail->next       = new Node<T>();
+          tail->next       = node;
           tail->next->prev = tail;
-
-          tail      = tail->next;
-          tail->val = val;
+          tail             = tail->next;
         }
 
         ++_size;
+      }
+
+      void push_back(const T& val) {
+        Node<T>* node = new Node<T>;
+        node->val     = val;
+        push_back(node);
+      }
+
+      /**
+       * Pushes a node instance to the head of this instance, taking memory ownership of the node.
+       *
+       * @param node Node instance to push to head.
+       */
+      void push_front(Node<T>* node) {
+        if (_size == 0) {
+          head      = node;
+          tail      = head;
+        }
+
+        else if (_size == 1) {
+          head->prev = node;
+          node->next = head;
+
+          head = node;
+        }
+
+        else {
+          head->prev = node;
+          node->next = head;
+
+          head = node;
+        }
+
+        ++_size;
+      }
+
+      void push_front(const T& val) {
+        Node<T>* node = new Node<T>;
+        node->val     = val;
+        push_front(node);
       }
 
       void pop_back() {
@@ -132,36 +173,6 @@ namespace ccoo::data_structure {
         }
 
         --_size;
-      }
-
-      void push_front(const T& val) {
-        if (_size == 0) {
-          head      = new Node<T>();
-          head->val = val;
-          tail      = head;
-        }
-
-        else if (_size == 1) {
-          Node<T>* node = new Node<T>();
-          node->val     = val;
-
-          head->prev = node;
-          node->next = head;
-
-          head = node;
-        }
-
-        else {
-          Node<T>* node = new Node<T>();
-          node->val     = val;
-
-          head->prev = node;
-          node->next = head;
-
-          head = node;
-        }
-
-        ++_size;
       }
 
       void pop_front() {
@@ -216,19 +227,25 @@ namespace ccoo::data_structure {
             tail       = head;
             head->next = nullptr;
           }
-
-          node->next = nullptr;
-          node->prev = nullptr;
         }
 
+        else if (node == head) {
+          head       = head->next;
+          head->prev = nullptr;
+        }
+
+        else if (node == tail) {
+          tail       = tail->prev;
+          tail->next = nullptr;
+        }
 
         else {
           node->prev->next = node->next;
           node->next->prev = node->prev;
-
-          node->prev = nullptr;
-          node->next = nullptr;
         }
+
+        node->next = nullptr;
+        node->prev = nullptr;
 
         _size--;
       }
