@@ -13,7 +13,7 @@ namespace ccoo::str {
    *
    * @returns Vector of split strings
    */
-  std::vector<std::string> split(const std::string& s, const char* delim) {
+  inline std::vector<std::string> split(const std::string& s, const std::string& delim) {
     std::vector<std::string> entries;
     if (s.empty()) { return entries; }
 
@@ -22,7 +22,7 @@ namespace ccoo::str {
 
     while (j != s.npos && i != j) {
       entries.emplace_back(s.substr(i, j - i));
-      i = j + 1;
+      i = j + delim.size();
       j = s.find(delim, i);
     }
     entries.emplace_back(s.substr(i));
@@ -40,7 +40,7 @@ namespace ccoo::str {
    *
    * @returns string_view slice instance
    */
-  std::string_view slice(const std::string& str, size_t pos, size_t stride) {
+  inline std::string_view slice(const std::string& str, size_t pos, size_t stride) {
     return std::string_view(str.data() + pos, stride);
   }
 };
