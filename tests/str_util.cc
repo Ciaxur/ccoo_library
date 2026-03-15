@@ -3,6 +3,8 @@
 #include <fmt/base.h>
 #include <fmt/core.h>
 #include <fmt/format.h>
+#include <cstring>
+#include <string_view>
 
 #include "test_suite.h"
 
@@ -54,6 +56,28 @@ namespace ccoo::str {
 
     return true;
   }
+
+  bool test_slice() {
+    {
+      const std::string s           = "Hello world";
+      const std::string_view sv     = slice(s, 0, 5);
+
+      ASSERT_PTR_EQ(s.data(), sv.data());
+      ASSERT_EQ(sv.size(), 5);
+      ASSERT_EQ(sv, "Hello");
+    }
+
+    {
+      const std::string s       = "Hello world";
+      const std::string_view sv = slice(s, 6, 5);
+
+      ASSERT_PTR_EQ(s.data() + 6, sv.data());
+      ASSERT_EQ(sv.size(), 5);
+      ASSERT_EQ(sv, "world");
+    }
+
+    return true;
+  }
 }
 
 int main() {
@@ -61,6 +85,7 @@ int main() {
   bool success = true;
 
   success = success && RUN_TEST(test_split);
+  success = success && RUN_TEST(test_slice);
 
   return success ? 0 : 1;
 };
