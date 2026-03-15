@@ -3,10 +3,66 @@
 #include <fmt/base.h>
 
 #include <list>
+#include <map>
+#include <set>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace ccoo::print {
+  /**
+   * Shallow prints a given unordered_set instance.
+   *
+   * @param mp Instance to print
+   */
+  template <typename K>
+  void unordered_set(const std::unordered_set<K>& mp) {
+    fmt::print("{{ ");
+    size_t i = 0;
+    for (const K& k : mp) { fmt::print("{}{}", k, ++i >= mp.size() ? "" : ", "); }
+    fmt::println(" }}");
+  }
+
+  /**
+   * Shallow prints a given set instance.
+   *
+   * @param mp Instance to print
+   */
+  template <typename K>
+  void set(const std::set<K>& mp) {
+    fmt::print("{{ ");
+    size_t i = 0;
+    for (const K& k : mp) { fmt::print("{}{}", k, ++i >= mp.size() ? "" : ", "); }
+    fmt::println(" }}");
+  }
+
+  /**
+   * Shallow prints a given unordered_map instance.
+   *
+   * @param mp Instance to print
+   */
+  template <typename K, typename V>
+  void unordered_map(const std::unordered_map<K, V>& mp) {
+    fmt::print("{{ ");
+    size_t i = 0;
+    for (const auto& p : mp) { fmt::print("{}: {}{}", p.first, p.second, ++i >= mp.size() ? "" : ", "); }
+    fmt::println(" }}");
+  }
+
+  /**
+   * Shallow prints a given map instance.
+   *
+   * @param mp Instance to print
+   */
+  template <typename K, typename V>
+  void map(const std::map<K, V>& mp) {
+    fmt::print("{{ ");
+    size_t i = 0;
+    for (const auto& p : mp) { fmt::print("{}: {}{}", p.first, p.second, ++i >= mp.size() ? "" : ", "); }
+    fmt::println(" }}");
+  }
+
   template <typename T>
   void list(const std::list<T>& ll) {
     fmt::print("{{ ");
@@ -68,5 +124,4 @@ namespace ccoo::print {
     fmt::println("{}{}", std::string(substr_i1 + 2, ' '), "^");
     fmt::println("{}{}", std::string(substr_i2 + 2, ' '), "^");
   }
-
 }
